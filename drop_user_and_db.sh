@@ -1,5 +1,6 @@
 #!/bin/bash
 /usr/bin/clear
+#TEST
 echo "This will delete user and homedir in /srv/wordpress-sites"
 
 read -p "Enter username to delete: " username
