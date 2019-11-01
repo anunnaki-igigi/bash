@@ -1,5 +1,6 @@
 #!/bin/bash
 /usr/bin/clear
+#TEST
 
 read -p "Aanmaken gebruiker (Geen leestekens!): " username
 useradd -g www-data -d /srv/wordpress-sites/$username -m -s /bin/ftpuser $username
