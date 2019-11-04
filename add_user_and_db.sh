@@ -15,14 +15,14 @@ echo "**************************************************************************
 echo "User:                             $username"
 echo "Password:                         $userpass"
 echo
-echo "Website:                          https://$username.hku.nl"  
+echo "Website:                          https://$username"  
 echo
-echo "FTP adres:                        $username.hku.nl"
+echo "FTP adres:                        $username"
 echo "FTP Username:                     $username"
 echo "FTP Password:                     $userpass"
 echo "************************************************************************************"
 } > /tmp/gebruiker.tmp
-mysqlroot="tHuYumubre9u"
+mysqlroot="********"
 mysql -uroot -p$mysqlroot <<MYSQL_SCRIPT
 CREATE DATABASE $username;
 CREATE USER '$username'@'localhost' IDENTIFIED BY '$userpass';
@@ -41,7 +41,7 @@ echo "**************************************************************************
 {
 echo "************************************************************************************"
 echo "Automatisch uitgevoerd voor nginx"
-echo "cp /etc/nginx/sites-available/hku.template /etc/nginx/sites-available/$username"
+echo "cp /etc/nginx/sites-available/flip.template /etc/nginx/sites-available/$username"
 echo "ln -s /etc/nginx/sites-available/$username /etc/nginx/sites-enabled/"
 echo "nginx -s reload"
 echo "************************************************************************************"
@@ -56,7 +56,7 @@ cat /tmp/gebruiker.tmp
 cat >> /etc/nginx/sites-available/$username << EOF
 server {
   listen 80;
-  server_name $username.hku.nl;
+  server_name $username;
   server_tokens off;
   root /nowhere; ## root doesn't have to be a valid path since we are redirecting
   return 301 https://\$server_name\$request_uri;
@@ -64,8 +64,8 @@ server {
 server {
         listen 443 ssl;
         server_tokens off;
-        ssl_certificate     /etc/nginx/cert/star_hku.crt;
-        ssl_certificate_key /etc/nginx/cert/hkuwildcard_key.pem;
+        ssl_certificate     /etc/nginx/cert/;
+        ssl_certificate_key /etc/nginx/cert/.pem;
         ssl_dhparam /etc/nginx/cert/dhparam.pem;
         ssl on;
         ssl_verify_client off;
@@ -77,7 +77,7 @@ server {
         add_header X-Content-Type-Options nosniff;
         root /srv/wordpress-sites/$username;
         index index.php index.html index.htm;
-        server_name $username.hku.nl;
+        server_name $username;
         access_log /var/log/nginx/$username.access.log;
         error_log /var/log/nginx/$username.error.log;
         location / {
@@ -104,8 +104,7 @@ nginx -s reload
 /usr/bin/clear
 
 cat /tmp/text.tmp
-echo "Alles gereed..Maak nu in ipam.hku.nl een DNS CNAME record aan voor https://$username.hku.nl"
-echo "$username CNAME studentpress"
+
 
 while true;
 do
@@ -119,7 +118,7 @@ do
 	  #if [[ $klopt == "j" || $klopt == "J" || $klopt == "ja" || $klopt == "Ja" ]]
 	  if [[ $klopt =~ ^([jJ][eE][sS]|[jJ])$ ]]
             then
-	       cat /tmp/gebruiker.tmp | mail -s "Gegevens gebruiker $username" -a "From: root@studentpress.hku.nl"  $mailadres
+	       cat /tmp/gebruiker.tmp | mail -s "Gegevens gebruiker $username" -a "From: root@jnkbjbm"  $mailadres
 	       /usr/bin/clear
 	       echo "Mail verstuurd"
 	       cat /tmp/gebruiker.tmp
